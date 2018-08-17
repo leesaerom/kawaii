@@ -26,6 +26,7 @@ html, body {
 	var overlay_mid = {}; // 중점 표시 오버레이
 	var overlay_user = {}; // 유저 표시 오버레이
 	
+	
 	/* 현재 위치(위도/경도)를 받아오기 위한 부분 */
 	$(function() {
 		if (nav == null) {
@@ -61,8 +62,12 @@ html, body {
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		};
 
-		console.log(latitude + "와" + longitude);
-
+		console.log(latitude + "," + longitude);
+		
+		var icon = {
+			    url: "http://maps.google.com/mapfiles/ms/micons/man.png", // url
+			    scaledSize: new google.maps.Size(38, 38) // scaled size
+			};
 		
 		/* DIV에 지도 달아주기 */
 		map = new google.maps.Map(document.getElementById("map_canvas"),
@@ -71,7 +76,7 @@ html, body {
 		marker = new google.maps.Marker({
 			map : map,
 			position : currentLocation,
-			icon: "http://maps.google.com/mapfiles/ms/micons/man.png",
+			icon: icon,
 			animation : google.maps.Animation.DROP
 		});
 		marker.addListener('click', toggleBounce);
@@ -88,7 +93,7 @@ html, body {
 					fillOpacity : 0.30,
 					map : map,
 					center : pos,
-					radius : 500,
+					radius : 1000,
 					editable : false
 				};
 				circle = new google.maps.Circle(default_circleOpt);
@@ -118,6 +123,8 @@ html, body {
 		});
 		map.setCenter(location);
 		
+		console.log("마커지점" + location);
+		
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
 				var pos = location;
@@ -129,7 +136,7 @@ html, body {
 					fillOpacity : 0.30,
 					map : map,
 					center : pos,
-					radius : 500,
+					radius : 1000,
 					editable : false
 				};
 				circle = new google.maps.Circle(marker_circleOpt);
@@ -143,7 +150,8 @@ html, body {
 	}
 
 	function toggleBounce() {
-
+		//console.log(latitude + "," + longitude);
+		
 		if (marker.getAnimation() != null) {
 			marker.setAnimation(null);
 		} else {
