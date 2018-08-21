@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "my-project-vision-213606",
+  "private_key_id": "4b1ab66e53aec283f6ab5191843c8b199520ea74",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCDW/v2FXa2iNEl\nbuOBiXYTqcfC8E35Ir/TdrR5RbEF+dhSQnlA15ay4SFd0iGLz2dokAN4dodjkSto\nSLWrj70nAR7OaIrlVbnayqPJzgEsr4H3E7tuQS4ci0OeQuRBrb9Bj8HGWLxdNDdK\n9uIgT5bAUDUjB3qgocsnl5NTExcRsPuq97ixrYfJp4aWz9MuN5d4JHLpiFBRJkYy\naabTUMWySvq165Uy7zCieE/q8rz/pOEBsl4DKeE0rIcASOWTxnrbkVQN8vFLhApg\n14EbzgOfNif+xk0S4wE3RuB+cv5MyRZvGxnsRLoSIfzaVLGMtEJopIRCVMZjPk5+\nJZPytkjhAgMBAAECggEAB7cS6XM9ZqdKouhkVvztDSa6NY0uBDdl9UBmJU8KQJnJ\n+nteYihDaPBTeI5lY1/4MK5QMN6j0S2TI0fteSULKNe+UKTX3xRB0yuWkv1NKPvq\nLgoH9rff8qPckeaXf9LJzlrIWJsovY/p/TZ6xadtCRCw7US0v2tfSm0S9WS0NLkH\nBXiviSJNoVMps4LLZgpae19AWN9qGU1Q2Wjz9/yWFepERG/CqJDlg7jD3Rbt1E56\nHentYQIbWpTpxgxFM+Y5uwJolDKXzkRTrlDE++JNzcU+bltQMrvYYqHth9JGIp8Z\n+Jq9vevAxayCf9VAs2qUaparuU30VmBOwG9BoflxMQKBgQC3sP0igNGQdE5WTCKi\nH9FhR4R3EuZ9cRfNlwQA0qOnOz1nr1WTUk2iQ4s+YgPgjpYq0KYvSe+5OCb+u5Zn\niOjGOkQxyWK4t6H9IIjteVLXyKnkEIimZxjza5RpVME3leCRcDLbXwIgsOyfxcfS\nEF5X7+cXYw7nNHw47QRst1uJ8QKBgQC3EV8f9ONygmIz7PN4nvt8gsVr1UBWiZX1\nLFBDCg3nSNPgDYnPMZI919SkX1ebiQ8MoBqbjyIMToY3HogNW+w3ZKqRIgwHWtK8\n2tpdK+MqARFoil4epcR3t/+WNZ/wP0D36DW5L2GFR004T+Mo/X7RE0oThmtilW6W\nhoqzTVs98QKBgAYc8L+mM9Mv26+JhxmIH4qyO5lO2rbP/a/M18hDOkkFcqyxrBJk\nCctdnhOsZV6iwCKaoP0v47dxQ/L0QTQe3UhDhiN2BUAKdGydGZF1mSkvN2AsoK+Q\n/MaVDPJYbLmx1jBg4IBmcAawfJ9wkI7QFqOsiy8/D67oEz49vQj1LSmxAoGBAJUV\nfY0txkiLq+OzlPdnKVDVwma1rQaMV2XpZ5egyX/PzFQLUm48ZWcdrFsMFfFhJbNX\nczO51bWGAUFECPIwKOdXgJxeyML4kOQhqnDz+7RKWF31SP7WanBAlNFD7HMfYA5D\nufSMhHOghF9Wl5zbC/rCJbJO5obLQNsuyCeK2MJRAoGARKhM2tpam22YxysOR7Tl\nZcBB+azvoMIYedr6FsRPVVu5XJBFSBpvdiSE+A3qHwKeZ3tdKCbGcXP80rH6uow9\n/IvnBC8Q2kZfKJaDUZ4J2Bd7LxjNSw9+zaWeUiNTQ74xPPHv77bOTk+AoJURrLzc\nMXruXO9XxOZVZrjAuHsLPf8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "submarine-cloudvision@my-project-vision-213606.iam.gserviceaccount.com",
+  "client_id": "111318622113280648220",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/submarine-cloudvision%40my-project-vision-213606.iam.gserviceaccount.com"
+}
