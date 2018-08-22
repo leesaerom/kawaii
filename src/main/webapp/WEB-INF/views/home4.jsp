@@ -65,14 +65,20 @@ html, body {
 			icon : icon,
 			animation : google.maps.Animation.DROP
 		});
-		marker.addListener('click', function() {
+		google.maps.event.addListener(marker, 'click', toggleBounce);
+	}
+
+	function toggleBounce() {
+		if (marker.getAnimation() !== null) {
+			marker.setAnimation(null);
+		} else {
 			infowindow.open(map, marker);
-			
-			infowindow.setContent('<div><strong>' + landName
-					+ '</strong><br>' + '위치정보: ' + lat + ", " + lng + '<br>'
-					+ '</div>');
+
+			infowindow.setContent('<div><strong>' + landName + '</strong><br>'
+					+ '위치정보: ' + lat + ", " + lng + '<br>' + '</div>');
 			infowindow.open(map, this);
-		});
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		}
 	}
 </script>
 </head>
