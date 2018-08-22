@@ -13,6 +13,17 @@ html, body {
 	margin: 10;
 	padding: 10;
 }
+    .wrap * {padding: 0;margin: 0;}
+    .wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+    .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+    .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+    .info .close:hover {cursor: pointer;}
+    .info .body {position: relative;overflow: hidden;}
+    .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+    .info .link {color: #5085BB;}
 </style>
 <script
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABYid41RaVrQL5pT8XhbZcRo3ss-MYG2w&libraries=places&callback=initMap"
@@ -75,9 +86,19 @@ html, body {
                 });
                 /* infowindow.setContent(results[0].formatted_address); */
                 
-                infowindow.setContent('<div><strong>' + landName + '</strong><br>'
-    					+ '<strong>위치정보: </strong>' + lat + ", " + lng + '<br>'
-    					+ '<strong>주소: </strong>' + results[0].formatted_address +'</div>');
+                infowindow.setContent(
+                		'<div class="wrap">' 
+                		+ '   <div class="info">'
+                		+ '		<div class="title"><strong>' + landName + '</strong></div><br>'
+                		+ '        <div class="body">'
+                		+ '            <div class="desc">' 
+                		+ '					<div class="ellipsis"><strong>주소: </strong>' + results[0].formatted_address +'</div>'
+    					+ '					<div class="jibun ellipsis"><strong>위치정보: </strong>' + lat + ", " + lng + '</div><br>'
+    					+ '            </div>'
+    					+ '        </div>'
+    					+ '   </div>'
+    					+ '</div>')
+    					
                 infowindow.open(map, marker);
               } else {
                 window.alert('No results found');
