@@ -1,6 +1,6 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" language="java" contentType="text/html; charset=UTF-8"
- pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="false" language="java"
+	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
 <style>
@@ -22,24 +22,26 @@ html, body {
 <script>
 	var map;
 	var marker;
-	
+	var infowindow;
+
 	//현재 위치(위도/경도)를 받아오기 위한 부분 
-	 $(function() {
+	$(function() {
 		$.ajax({
-			url:'mapinfo'
-			, method:'get'
-			, dataType : 'json'
-			, contentType : 'application/json; charset=UTF-8'
-			, success:function(data){
+			url : 'mapinfo',
+			method : 'get',
+			dataType : 'json',
+			contentType : 'application/json; charset=UTF-8',
+			success : function(data) {
 				var lat = data.lat;
 				var lng = data.lng;
-				
-				initMap(lat, lng);
+				var landName = data.landName;
+
+				initMap(lat, lng, landName);
 			}
 		});
- 	});
+	});
 
-	function initMap(lat, lng) {
+	function initMap(lat, lng, landName) {
 		var map = new google.maps.Map(document.getElementById('map'), {
 			zoom : 15,
 			center : {
@@ -47,29 +49,30 @@ html, body {
 				lng : lng
 			},
 		});
-		
+
+		infowindow = new google.maps.InfoWindow();
+
 		var icon = {
-			    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-			    scaledSize: new google.maps.Size(38, 38) // scaled size
-			};
-		
-		
+			url : 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+			scaledSize : new google.maps.Size(38, 38)
+		// scaled size
+		};
+
 		/* 지도 위에 마커 달아주기 */
 		marker = new google.maps.Marker({
 			map : map,
 			position : map.center,
-			icon: icon,
+			icon : icon,
 			animation : google.maps.Animation.DROP
 		});
-		marker.addListener('click', toggleBounce);
-	}
-
-	function toggleBounce() {
-		if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-		} else {
-			marker.setAnimation(google.maps.Animation.BOUNCE);
-		}
+		marker.addListener('click', function() {
+			infowindow.open(map, marker);
+			
+			infowindow.setContent('<div><strong>' + landName
+					+ '</strong><br>' + '위치정보: ' + lat + ", " + lng + '<br>'
+					+ '</div>');
+			infowindow.open(map, this);
+		});
 	}
 </script>
 </head>

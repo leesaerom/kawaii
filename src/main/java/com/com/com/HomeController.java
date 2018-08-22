@@ -178,9 +178,11 @@ public class HomeController {
 					LocationInfo info = annotation.getLocationsList().listIterator().next();
 					System.out.println("Landmark: " + annotation.getDescription() + "\n" + "LatLng: " + info.getLatLng());
 					
+					String landName = annotation.getDescription();
 					double lat = info.getLatLng().getLatitude();
 					double lng = info.getLatLng().getLongitude();
 					
+					map.put("landName", landName);
 					map.put("lat", lat);
 					map.put("lng", lng);
 					
