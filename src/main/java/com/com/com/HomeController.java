@@ -49,7 +49,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
-		return "home";
+		return "home7";
 	}
 	
 	@RequestMapping(value = "/fileupload", method = RequestMethod.POST)

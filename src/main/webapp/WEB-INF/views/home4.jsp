@@ -53,12 +53,12 @@
  		initialize(latitude, longitude);
  	}
  
- 	function initialize(latitude, longitude) {x
+ 	function initialize(latitude, longitude) {
  		/* 현재 위치의 위도와 경도 정보를 currentLocatioon 에 초기화 */
  		var currentLocation = new google.maps.LatLng(latitude, longitude);
  		var mapOptions = {
  			center : currentLocation, /* 지도에 보여질 위치 */
- 			zoom : 16, /* 지도 줌 (0축소 ~ 18확대),  */
+ 			zoom : 15, /* 지도 줌 (0축소 ~ 18확대),  */
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		};
  		console.log(latitude + "," + longitude);
@@ -180,6 +180,7 @@
  		}
  		//infowindow.open(map, marker);
  	}
+ 	
 </script>
 </head>
 <body>
