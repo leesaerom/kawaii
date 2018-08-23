@@ -21,101 +21,61 @@ html, body {
 <script
 	src="${pageContext.request.contextPath}/resources/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-	function geoFindMe() {
-		var output = document.getElementById("out");
+	var apiGeolocationSuccess = function(position) {
+		alert("API geolocation success!\n\nlat = " + position.coords.latitude
+				+ "\nlng = " + position.coords.longitude);
+	};
 
-		if (!navigator.geolocation) {
-			output.innerHTML = "<p>사용자의 브라우저는 지오로케이션을 지원하지 않습니다.</p>";
-			return;
+	var tryAPIGeolocation = function() {
+		jQuery
+				.post(
+						"https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDCa1LUe1vOczX1hO_iGYgyo8p_jYuGOPU",
+						function(success) {
+							apiGeolocationSuccess({
+								coords : {
+									latitude : success.location.lat,
+									longitude : success.location.lng
+								}
+							});
+						}).fail(function(err) {
+					alert("API Geolocation error! \n\n" + err);
+				});
+	};
+
+	var browserGeolocationSuccess = function(position) {
+		alert("Browser geolocation success!\n\nlat = "
+				+ position.coords.latitude + "\nlng = "
+				+ position.coords.longitude);
+	};
+
+	var browserGeolocationFail = function(error) {
+		switch (error.code) {
+		case error.TIMEOUT:
+			alert("Browser geolocation error !\n\nTimeout.");
+			break;
+		case error.PERMISSION_DENIED:
+			if (error.message.indexOf("Only secure origins are allowed") == 0) {
+				tryAPIGeolocation();
+			}
+			break;
+		case error.POSITION_UNAVAILABLE:
+			alert("Browser geolocation error !\n\nPosition unavailable.");
+			break;
 		}
+	};
 
-		function success(position) {
-			var latitude = position.coords.latitude;
-			var longitude = position.coords.longitude;
-
-			output.innerHTML = '<p>위도 : ' + latitude + '° <br>경도 : '
-					+ longitude + '°</p>';
-
-			var img = new Image();
-			img.src = "http://maps.googleapis.com/maps/api/staticmap?center="
-					+ latitude + "," + longitude
-					+ "&zoom=13&size=300x300&sensor=false";
-
-			output.appendChild(img);
+	var tryGeolocation = function() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(browserGeolocationSuccess,
+					browserGeolocationFail, {
+						maximumAge : 50000,
+						timeout : 20000,
+						enableHighAccuracy : true
+					});
 		}
-		;
+	};
 
-		function error() {
-			output.innerHTML = "사용자의 위치를 찾을 수 없습니다.";
-		}
-		;
-
-		output.innerHTML = "<p>Locating…</p>";
-
-		navigator.geolocation.getCurrentPosition(success, error);
-	}
-	function prompt(window, pref, message, callback) {
-	    let branch = Components.classes["@mozilla.org/preferences-service;1"]
-	                           .getService(Components.interfaces.nsIPrefBranch);
-
-	    if (branch.getPrefType(pref) === branch.PREF_STRING) {
-	        switch (branch.getCharPref(pref)) {
-	        case "always":
-	            return callback(true);
-	        case "never":
-	            return callback(false);
-	        }
-	    }
-
-	    let done = false;
-
-	    function remember(value, result) {
-	        return function() {
-	            done = true;
-	            branch.setCharPref(pref, value);
-	            callback(result);
-	        }
-	    }
-
-	    let self = window.PopupNotifications.show(
-	        window.gBrowser.selectedBrowser,
-	        "geolocation",
-	        message,
-	        "geo-notification-icon",
-	        {
-	            label: "Share Location",
-	            accessKey: "S",
-	            callback: function(notification) {
-	                done = true;
-	                callback(true);
-	            }
-	        }, [
-	            {
-	                label: "Always Share",
-	                accessKey: "A",
-	                callback: remember("always", true)
-	            },
-	            {
-	                label: "Never Share",
-	                accessKey: "N",
-	                callback: remember("never", false)
-	            }
-	        ], {
-	            eventCallback: function(event) {
-	                if (event === "dismissed") {
-	                    if (!done) callback(false);
-	                    done = true;
-	                    window.PopupNotifications.remove(self);
-	                }
-	            },
-	            persistWhileVisible: true
-	        });
-	}
-
-	prompt(window,
-	       "extensions.foo-addon.allowGeolocation",
-	       "Foo Add-on wants to know your location.",
-	       function callback(allowed) { alert(allowed); });
+	tryGeolocation();
 </script>
 </head>
 <body>
