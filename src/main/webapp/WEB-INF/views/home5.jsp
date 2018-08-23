@@ -36,7 +36,7 @@ html, body {
 	var infowindow;
 	var geocoder;
 
-	//현재 위치(위도/경도)를 받아오기 위한 부분 
+	//사진 위치(위도/경도)를 받아오기 위한 부분 
 	$(function() {
 		$.ajax({
 			url : 'mapinfo',
@@ -191,12 +191,10 @@ html, body {
 </script>
 </head>
 <body>
-	<input type="hidden" id="lat" value="${sessionScope.lat}">
-	<input type="hidden" id="lng" value="${sessionScope.lng}">
-	<h1>Hello world!</h1>
+	<h1>사진 위치정보</h1>
 	<div id="map"></div>
 
-	<P>The time on the server is ${serverTime}.</P>
+	<P><a href="home4">현재위치의 주변 추천</a></P>
 
 </body>
 </html>

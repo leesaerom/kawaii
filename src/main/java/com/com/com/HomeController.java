@@ -211,4 +211,15 @@ public class HomeController {
 		return map;
 	}
 
+	@RequestMapping(value = "/home4", method = RequestMethod.GET)
+	public String home4() {
+		
+		return "home4";
+	}
+	
+	@RequestMapping(value = "/home6", method = RequestMethod.GET)
+	public String home6() {
+		
+		return "home6";
+	}
 }
