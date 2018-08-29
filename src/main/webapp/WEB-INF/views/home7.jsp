@@ -16,50 +16,87 @@ html, body {
 	padding: 0;
 }
 </style>
-<script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABYid41RaVrQL5pT8XhbZcRo3ss-MYG2w&sensor=true&libraries=places&callback=initialize"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-	$(function() {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(pos){
-				GoogleMap.initialize(pos.coords.latitude, pos.coords.longitude);
-			    
-			}, function(e) {
-				console.log({
-					 0: 'unknown error',
-					 1: 'permission denied',
-					 2: 'position unavailable (error response from location provider)',
-					 3: 'timed out'
-				}[e.code]);
-			}, {
-				enableHeighAccuracy:true,
-				timeout:10000,
-				maximumAge:0
-			});
-		}
-		
-		GoogleMap={
-			initialize:function(latitude, longitude) {
-				var geocoder = new google.maps.Geocoder();
-				
-				geocoder.geocode({'latLng' : new google.maps.LatLng(latitude, longitude)},
-						function(results, status){
-					if(status == google.maps.GeocoderStatus.OK){
-						console.log(results);
-						alert('고객님은 현재 ' + results[2].formatted_address + '에 접속중 입니다.');
-					}
-				});
+	if (window.location.protocol == "http:") {
+		window.location.protocol = "https:";
+	}
+
+	button.onclick = function() {
+		var startPos;
+		var element = document.getElementById("nudge");
+
+		var showNudgeBanner = function() {
+			nudge.style.display = "block";
+		};
+
+		var hideNudgeBanner = function() {
+			nudge.style.display = "none";
+		};
+
+		var nudgeTimeoutId = setTimeout(showNudgeBanner, 5000);
+
+		var geoSuccess = function(position) {
+			hideNudgeBanner();
+			// We have the location, don't display banner
+			clearTimeout(nudgeTimeoutId);
+
+			// Do magic with location
+			startPos = position;
+			document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+			document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+		};
+		var geoError = function(error) {
+			switch (error.code) {
+			case error.TIMEOUT:
+				// The user didn't accept the callout
+				showNudgeBanner();
+				break;
 			}
+			;
+
+			navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+		};
+
+		// check for Geolocation support
+		if (navigator.geolocation) {
+			console.log('Geolocation is supported!');
+		} else {
+			console.log('Geolocation is not supported for this Browser/OS.');
 		}
-	});
+
+		window.onload = function() {
+			var startPos;
+			var geoOptions = {
+				enableHighAccuracy : true
+			}
+
+			var geoSuccess = function(position) {
+				startPos = position;
+				document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+				document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+			};
+			var geoError = function(error) {
+				console.log('Error occurred. Error code: ' + error.code);
+				// error.code can be:
+				//   0: unknown error
+				//   1: permission denied
+				//   2: position unavailable (error response from location provider)
+				//   3: timed out
+			};
+
+			navigator.geolocation.getCurrentPosition(geoSuccess, geoError,
+					geoOptions);
+		};
+	}
 </script>
 </head>
 <body>
 	<button id="getLocation" type="button">위치 정보 수집</button>
 	<div id="map" style="width: 500px; height: 500px; display: block;"></div>
-
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABYid41RaVrQL5pT8XhbZcRo3ss-MYG2w&sensor=true&libraries=places&callback=initialize"></script>
 </body>
 
 </html>

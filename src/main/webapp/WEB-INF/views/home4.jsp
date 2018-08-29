@@ -106,7 +106,7 @@
  		var request = {
 				location : currentLocation,
 				radius : '500',
-				types : [ 'store' ]
+				types : [ 'hospital' ]
 			};
 		
 			var container = document.getElementById('nearbyResult');
@@ -117,9 +117,8 @@
 			function callback(results, status) {
 		
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
-		
+					addMarker(results);
 					for (var i = 0; i < results.length; i++) {
-		
 						container.innerHTML += results[i].name + '<br />';
 					}
 				}
@@ -132,11 +131,11 @@
  	// Add a marker to the map and push to the array.
  	function addMarker(location) {
  		/* 기존에 있던 원 삭제 후 */
- 		circle.setMap(null);
+ 		//circle.setMap(null);
  		
  		/* 기존에 있던 마커 삭제 후 */
  		/*새 마커 추가하기. */
- 		marker.setMap(null);
+ 		//marker.setMap(null);
  		
  		marker = new google.maps.Marker({
  			position : location,
@@ -146,27 +145,6 @@
 		
 		console.log("마커지점" + location);
 		
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				var pos = location;
- 				var marker_circleOpt = {
- 					strokeColor : '#0066FF',
- 					strokeOpacity : 0.8,
- 					strokeWeight : 2,
- 					fillColor : '#0066FF',
-					fillOpacity : 0.30,
-					map : map,
-					center : pos,
-					radius : 500,
-					radius : 1000,
-					editable : false
-				};
-				circle = new google.maps.Circle(marker_circleOpt);
- 
- 				
- 			});
- 		}
- 		
  		/* 마커 토글바운스 이벤트 걸어주기(마커가 통통 튀도록 애니메이션을 걸어줌) */
  		marker.addListener('click', toggleBounce);
 	}

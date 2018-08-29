@@ -3,8 +3,10 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="VO.MyImage" alias="MyImage"/>
+		<typeAlias type="VO.Member" alias="Member"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="myImageMapper.xml"/>
+		<mapper resource="memberMapper.xml"/>
 	</mappers>
 </configuration>
