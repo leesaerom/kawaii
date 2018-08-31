@@ -3,18 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="t4.submarine.com.DAO.MemberMapper">
-
-
+<mapper namespace="DAO.MemberMapper">
 
 <!-- 회원가입 처리 SQL -->
-
-
-	
-	<!-- 이메일 중복 검사 -->
-	<select id="checkEmail" parameterType="String" resultType="int">
-		SELECT count(*) from member where useremail = #{useremail}
-	</select>
 	
 	<insert id="registerMember" parameterType="Member">
 		INSERT INTO members
@@ -27,7 +18,7 @@
 		)
 		VALUES
 		(
-		  , #{userid}
+		   #{userid}
 		  , #{username}
 		  , #{userpassword}
 		  , #{nickname}

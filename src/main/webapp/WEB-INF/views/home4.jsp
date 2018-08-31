@@ -106,7 +106,7 @@
  		var request = {
 				location : currentLocation,
 				radius : '500',
-				types : [ 'hospital' ]
+				types : [ 'store' ]
 			};
 		
 			var container = document.getElementById('nearbyResult');
@@ -165,7 +165,6 @@
 	<div id="map_canvas"></div>
 	
 	<div id="nearbyResult"></div>
-	<div><a href="home6">Nearby Place search</a></div>
 </body>
 
 </html>

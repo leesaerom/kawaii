@@ -32,7 +32,9 @@ import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.cloud.vision.v1.LocationInfo;
 import com.google.protobuf.ByteString;
 
+import DAO.MemberMapper;
 import DAO.imageMapper;
+import VO.Member;
 import VO.MyImage;
 
 /**
@@ -45,186 +47,49 @@ public class MemberController {
 	SqlSession sqlSession;
 	
 	
-	String UPLOADPATH = System.getProperty("user.dir") + "\\workspace\\VisionApi\\src\\main\\webapp\\resources\\images\\";
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home() {
-		return "home";
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login() {
+		
+		return "login";
 	}
 	
-	@RequestMapping(value = "/fileupload", method = RequestMethod.POST)
-	public String upload(MultipartFile uploadfile) {
+	@RequestMapping(value = "/join", method = RequestMethod.GET)
+	public String join() {
 		
-		
-		UUID uuid = UUID.randomUUID();
-		String saveFileName = uuid + "_" + uploadfile.getOriginalFilename();
-		
-		File saveFile = new File(UPLOADPATH, saveFileName);
-		
-		imageMapper imageManager = sqlSession.getMapper(imageMapper.class);
-		
-		try {
-			uploadfile.transferTo(saveFile);
-			MyImage image = new MyImage();
-			image.setOriginalFileName(uploadfile.getOriginalFilename());
-			image.setChangedFileName(saveFileName);
-			imageManager.uploadFile(image);
-		} catch (Exception e) {
-			e.printStackTrace();
+		return "join";
+	}
+	
+	@RequestMapping(value = "/joinup", method = RequestMethod.GET)
+	public String join(Member member, HttpSession session) {
+		MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
+		System.out.println(member.getNickname());
+		if(member.getNickname() == null) {
+			member.setNickname("별명없음");
+			System.out.println(member);
 		}
+		System.out.println(member.getNickname());
+		mapper.registerMember(member);
 		
-		return "home";
+		return "login";
 	}
 	
-	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public String show(Model model) {
+	@RequestMapping(value = "/signin", method = RequestMethod.POST)
+	public String login(Member member, HttpSession session) {
+		MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
 		
+		Member m = mapper.selectOne(member);
 		
-		imageMapper imageManager = sqlSession.getMapper(imageMapper.class);
+		session.setAttribute("userid", m.getUserid());
+		session.setAttribute("userpassword", m.getUserpassword());
+		session.setAttribute("nickname", m.getNickname());
 		
-		List<MyImage> imageList = imageManager.showAll();
-		
-		List<String> nameList = new ArrayList<String>();
-		
-		for(int i = 0; i < imageList.size(); i++) {
-			nameList.add(imageList.get(i).getChangedFileName());
-		}
-		
-		model.addAttribute("imageList", nameList);
-		
-		//寃��깋�떆 http://203.233.196.182:8888/hello/resources/images/22f958f3-2704-4a8e-ad4d-3e418fd59c48_bigben2.jpg
-		//�떎�쓬怨� 媛숈씠 IP + port + 寃쎈줈瑜� �엯�젰
-		/*
-		 * https://www.google.co.kr/searchbyimage?site=search&image_url=(寃쎈줈)
-		 * http://203.233.196.182:8888/hello/resources/images/22f958f3-2704-4a8e-ad4d-3e418fd59c48_bigben2.jpg
-		 * */
-		
-		
-		return "home2";
+		return "redirect:/";
 	}
 	
-	@RequestMapping(value = "/imagecapture", method = RequestMethod.GET)
-	public String imagecapture() {
-		return "imagecapture";
-	}
-	
-	@RequestMapping(value = "/capture", method = RequestMethod.POST)
-	public String capture(MultipartFile camera, HttpSession session) {
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session) {
+		session.invalidate();
 		
-		System.out.println(UPLOADPATH);
-		
-		UUID uuid = UUID.randomUUID();
-		String saveFileName = uuid + "_" + camera.getOriginalFilename();
-		File saveFile = new File(UPLOADPATH, saveFileName);
-		imageMapper imageManager = sqlSession.getMapper(imageMapper.class);
-		try {
-			camera.transferTo(saveFile);
-			MyImage image = new MyImage();
-			image.setOriginalFileName(camera.getOriginalFilename());
-			image.setChangedFileName(saveFileName);
-			imageManager.uploadFile(image);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("???");
-		
-		session.setAttribute("name", saveFileName);
-		
-		
-		return "home3";
-	}
-	
-	@RequestMapping(value = "/result", method = RequestMethod.GET)
-	public String result(HttpSession session) {
-		
-		
-		try {
-			detectLandmarks(UPLOADPATH + session.getAttribute("name"));
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return "home5";
-	}
-	
-	
-	public static Map<String, Object> detectLandmarks(String filePath) throws Exception, IOException {
-		Map<String, Object> map = new HashMap<>(); 
-		List<AnnotateImageRequest> requests = new ArrayList<>();
-		ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
-
-		Image img = Image.newBuilder().setContent(imgBytes).build();
-		Feature feat = Feature.newBuilder().setType(Type.LANDMARK_DETECTION).build();
-		AnnotateImageRequest request = AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
-		requests.add(request);
-
-		try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
-			BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
-			List<AnnotateImageResponse> responses = response.getResponsesList();
-
-			for (AnnotateImageResponse res : responses) {
-				if (res.hasError()) {
-					System.out.printf("Error: %s\n", res.getError().getMessage());
-				}
-
-				// For full list of available annotations, see http://g.co/cloud/vision/docs
-				for (EntityAnnotation annotation : res.getLandmarkAnnotationsList()) {
-					LocationInfo info = annotation.getLocationsList().listIterator().next();
-					System.out.println("Landmark: " + annotation.getDescription() + "\n" + "LatLng: " + info.getLatLng());
-					
-					String landName = annotation.getDescription();
-					double lat = info.getLatLng().getLatitude();
-					double lng = info.getLatLng().getLongitude();
-					
-					map.put("landName", landName);
-					map.put("lat", lat);
-					map.put("lng", lng);
-					
-					return map;
-				}
-				
-				System.out.println(map + "!");
-			}
-		}
-		return map;
-	}
-	
-	@RequestMapping(value = "/mapinfo", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> home4(HttpSession session, Model model) {
-		Map<String, Object> map = new HashMap<>();
-		
-		try {
-			map = detectLandmarks(UPLOADPATH + session.getAttribute("name"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return map;
-	}
-
-	@RequestMapping(value = "/home4", method = RequestMethod.GET)
-	public String home4() {
-		
-		return "home4";
-	}
-	
-	@RequestMapping(value = "/home6", method = RequestMethod.GET)
-	public String home6() {
-		
-		return "home6";
-	}
-	@RequestMapping(value = "/home7", method = RequestMethod.GET)
-	public String home7() {
-		
-		return "home7";
+		return "redirect:/";
 	}
 }

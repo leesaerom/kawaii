@@ -109,8 +109,8 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/capture", method = RequestMethod.POST)
-	public String capture(MultipartFile camera, HttpSession session) {
-		
+	public @ResponseBody Integer capture(MultipartFile camera, HttpSession session, Model model) {
+		int result = 0;
 		System.out.println(UPLOADPATH);
 		
 		UUID uuid = UUID.randomUUID();
@@ -122,7 +122,7 @@ public class HomeController {
 			MyImage image = new MyImage();
 			image.setOriginalFileName(camera.getOriginalFilename());
 			image.setChangedFileName(saveFileName);
-			imageManager.uploadFile(image);
+			result = imageManager.uploadFile(image);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -131,8 +131,7 @@ public class HomeController {
 		
 		session.setAttribute("name", saveFileName);
 		
-		
-		return "home3";
+		return result;
 	}
 	
 	@RequestMapping(value = "/result", method = RequestMethod.GET)
@@ -226,5 +225,10 @@ public class HomeController {
 	public String home7() {
 		
 		return "home7";
+	}
+	@RequestMapping(value = "/write", method = RequestMethod.GET)
+	public String write() {
+		
+		return "imagecapture";
 	}
 }
