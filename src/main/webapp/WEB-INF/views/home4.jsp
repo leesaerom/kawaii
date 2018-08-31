@@ -7,7 +7,8 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <style>
 	#map_canvas {
-		height: 100%;
+		width: 70%;
+		height: 70%;
 	}
 	html, body {
 		height: 100%;
@@ -16,7 +17,7 @@
 	}
 </style>
 <script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABYid41RaVrQL5pT8XhbZcRo3ss-MYG2w&libraries=places&callback=initialize"></script>
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABYid41RaVrQL5pT8XhbZcRo3ss-MYG2w&v=3.exp&signed_in=true&libraries=places&callback=initialize"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
@@ -25,7 +26,8 @@
 	var marker;
 	var overlay_mid = {}; // 중점 표시 오버레이
 	var overlay_user = {}; // 유저 표시 오버레이
-	
+	var infowindow;
+	//var MARKER_PATH = 'https://cdn.icon-icons.com/icons2/882/PNG/512/1-08_icon-icons.com_68795.png';
 	
 	/* 현재 위치(위도/경도)를 받아오기 위한 부분 */
 	$(function() {
@@ -58,14 +60,14 @@
  		var currentLocation = new google.maps.LatLng(latitude, longitude);
  		var mapOptions = {
  			center : currentLocation, /* 지도에 보여질 위치 */
- 			zoom : 15, /* 지도 줌 (0축소 ~ 18확대),  */
+ 			zoom : 16, /* 지도 줌 (0축소 ~ 18확대),  */
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		};
  		console.log(latitude + "," + longitude);
 		
 		var icon = {
 			    url: "http://maps.google.com/mapfiles/ms/micons/man.png", // url
-			    scaledSize: new google.maps.Size(38, 38) // scaled size
+			    scaledSize: new google.maps.Size(44, 44	) // scaled size
 			};
 		
 		/* DIV에 지도 달아주기 */
@@ -79,7 +81,7 @@
 			icon: icon,
 			animation : google.maps.Animation.DROP
 		});
-		marker.addListener('click', toggleBounce);
+		/* marker.addListener('click', toggleBounce); */
  		
  		//#################################################################################//
  		if (navigator.geolocation) {
@@ -106,58 +108,83 @@
  		var request = {
 				location : currentLocation,
 				radius : '500',
-				types : [ 'store' ]
+				types : [ 'cafe' ]
 			};
 		
 			var container = document.getElementById('nearbyResult');
-		
+			infowindow = new google.maps.InfoWindow();
 			var service = new google.maps.places.PlacesService(container);
 			service.nearbySearch(request, callback);
 		
 			function callback(results, status) {
-		
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
-					addMarker(results);
 					for (var i = 0; i < results.length; i++) {
+						//var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
+			           // var markerIcon = MARKER_PATH + markerLetter + '.png';
 						container.innerHTML += results[i].name + '<br />';
+						var places = results[i];
+						/* createMarkers(places, markerIcon); */
+						createMarkers(places);
 					}
 				}
+				else {
+					return;
+				}
 		}
- 		
  	/* 	map.addListener('click', function(event) {
  			addMarker(event.latLng); */
  	}
  
  	// Add a marker to the map and push to the array.
- 	function addMarker(location) {
- 		/* 기존에 있던 원 삭제 후 */
- 		//circle.setMap(null);
- 		
- 		/* 기존에 있던 마커 삭제 후 */
- 		/*새 마커 추가하기. */
- 		//marker.setMap(null);
- 		
- 		marker = new google.maps.Marker({
- 			position : location,
- 			map : map
-		});
-		map.setCenter(location);
-		
-		console.log("마커지점" + location);
-		
- 		/* 마커 토글바운스 이벤트 걸어주기(마커가 통통 튀도록 애니메이션을 걸어줌) */
- 		marker.addListener('click', toggleBounce);
-	}
- 	function toggleBounce() {
- 		//console.log(latitude + "," + longitude);
-		
-		if (marker.getAnimation() != null) {
-			marker.setAnimation(null);
-		} else {
- 			marker.setAnimation(google.maps.Animation.BOUNCE);
+ 		function createMarkers(places) {
+ 		    var bounds = new google.maps.LatLngBounds();
+ 		    var placeLoc = places.geometry.location;
+ 		    
+ 		    var icon = {
+ 				url: "https://cdn.icon-icons.com/icons2/882/PNG/512/1-08_icon-icons.com_68795.png", // url
+ 				scaledSize: new google.maps.Size(48, 48) // scaled size
+ 			};
+ 		    
+ 		    var marker = new google.maps.Marker({
+		          map: map,
+		          position: places.geometry.location,
+		          title: places.name,
+		          icon: icon,
+		          animation: google.maps.Animation.DROP
+ 		    });
+ 		    
+ 		   	google.maps.event.addListener(marker, 'click', function() {
+ 				infowindow.setContent(places.name);
+ 				infowindow.open(map, this);
+ 			});
  		}
- 		//infowindow.open(map, marker);
- 	}
+ 		     /*  for (var i = 0, place; place = places[i]; i++) {
+ 		        var image = {
+ 		          url: place.icon,
+ 		          size: new google.maps.Size(71, 71),
+ 		          origin: new google.maps.Point(0, 0),
+ 		          anchor: new google.maps.Point(17, 34),
+ 		          scaledSize: new google.maps.Size(25, 25)
+ 		        };
+
+ 		        var marker = new google.maps.Marker({
+ 		          map: map,
+ 		          icon: image,
+ 		          title: place.name,
+ 		          position: place.geometry.location
+ 		        });
+	
+ 		        bounds.extend(place.geometry.location);
+ 		       google.maps.event.addListener(marker, 'click', function() {
+ 		    	  infowindow.setContent(marker.title);
+ 		    	  
+ 		    	  infowindow.open(map, this);
+ 		    	  });
+ 		      }
+ 		      map.fitBounds(bounds);
+ 		    } */
+
+ 		   /*  window.google.maps.event.addDomListener(window, 'load', initialize); */
  	
 </script>
 </head>
