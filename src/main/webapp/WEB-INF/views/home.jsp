@@ -77,5 +77,6 @@ $(function(){
 		</form>
 	</div>
 	<P><a href="home4">현재위치의 주변 추천</a></P>
+	<p><a href="home8">검색어로 추천목록</a></p>
 </body>
 </html>

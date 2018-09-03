@@ -226,6 +226,12 @@ public class HomeController {
 		
 		return "home7";
 	}
+	@RequestMapping(value = "/home8", method = RequestMethod.GET)
+	public String home8() {
+		
+		return "home8";
+	}
+	
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String write() {
 		
