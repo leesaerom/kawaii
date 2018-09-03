@@ -67,7 +67,7 @@
 		
 		var icon = {
 			    url: "http://maps.google.com/mapfiles/ms/micons/man.png", // url
-			    scaledSize: new google.maps.Size(44, 44	) // scaled size
+			    scaledSize: new google.maps.Size(38, 38) // scaled size
 			};
 		
 		/* DIV에 지도 달아주기 */
@@ -142,7 +142,7 @@
  		    
  		    var icon = {
  				url: "https://cdn.icon-icons.com/icons2/882/PNG/512/1-08_icon-icons.com_68795.png", // url
- 				scaledSize: new google.maps.Size(48, 48) // scaled size
+ 				scaledSize: new google.maps.Size(48, 44) // scaled size
  			};
  		    
  		    var marker = new google.maps.Marker({

@@ -177,34 +177,104 @@
 	var overlay;
 	var map;
 	var USGSOverlay;
+	var nav = null;
 	//USGSOverlay.prototype = new google.maps.OverlayView();
 	contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
     markers = [], // 마커를 담을 배열입니다
     currCategory = ''; // 현재 선택된 카테고리를 가지고 있을 변수입니다
     
-    function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: {lat: 37.563642, lng: 126.975349}
-        });
-        var geocoder = new google.maps.Geocoder(map);
+    /* 현재 위치(위도/경도)를 받아오기 위한 부분 */
+	$(function() {
+		/* $('#BK9').on('click', banking);
+		$('#MT1').on('click', mart);
+		$('#PM9').on('click', pharmacy);
+		$('#OL7').on('click', oil);
+		$('#CE7').on('click', cafe);
+		$('#CS2').on('click', store); */
 		
-     // 장소 검색 객체를 생성합니다
-       geocoder.geocode({ 'address' : search }, function(results, status) {
-		  if(status == "ZERO_RESULTS") {
-		    //Indicate to user no location has been found
-		  } else {
-		    //Do something with resulting location(s)
-		  }
+		if (nav == null) {
+ 			nav = window.navigator;
+ 		}
+ 		if (nav != null) {
+ 			var geoloc = nav.geolocation;
+ 			if (geoloc != null) {
+ 				/* Callback 성공 시, successCallback() 호출 */
+ 				geoloc.getCurrentPosition(successCallback);
+ 			} else {
+ 				alert("geolocation not supported");
+ 			}
+ 		} else {
+ 			alert("Navigator not found");
+ 		}
+ 	});
+    
+	function successCallback(position) {
+ 		/* 위도 */var latitude = position.coords.latitude;
+ 		/* 경도 */var longitude = position.coords.longitude;
+ 
+ 		/* Google Map으로 위도와 경도 초기화 */
+ 		initMap(latitude, longitude);
+ 	}
+    
+	function initMap(latitude, longitude) {
+		/* 현재 위치의 위도와 경도 정보를 currentLocatioon 에 초기화 */
+ 		var currentLocation = new google.maps.LatLng(latitude, longitude);
+ 		var mapOptions = {
+ 	 			center : currentLocation, /* 지도에 보여질 위치 */
+ 	 			zoom : 15, /* 지도 줌 (0축소 ~ 18확대),  */
+ 				mapTypeId : google.maps.MapTypeId.ROADMAP
+ 		};
+ 		map = new google.maps.Map(document.getElementById("map"),
+ 	 			mapOptions);
+ 		
+ 		document.getElementById('BK9').addEventListener('click', function() {
+ 			banking(currentLocation);
 	    });
-       
-       var mapOptions = {
-    		   center: results[0].geometry.bounds.getCenter(),
-    		   zoom: 10,
-    		   mapTypeId: google.maps.MapTypeId.ROADMAP
-    		 };
-    		 var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    }
+	}
+	
+	function banking(currentLocation) {
+ 		var request = {
+				location : currentLocation,
+				radius : '1000',
+				types : [ 'bank' ]
+			};
+		
+			var container = document.getElementById('categoryResult');
+		
+			var service = new google.maps.places.PlacesService(container);
+			service.nearbySearch(request, callback);
+		
+			function callback(results, status) {
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					for (var i = 0; i < results.length; i++) {
+						container.innerHTML += results[i].name + '<br />';
+						var places = results[i];
+						createMarkers(places);
+					}
+				}
+				else {
+					return;
+				}
+			}
+	}
+			
+	function createMarkers(places) {
+		var bounds = new google.maps.LatLngBounds();
+		var placeLoc = places.geometry.location;	
+		
+		var marker = new google.maps.Marker({
+	          map: map,
+	          position: places.geometry.location,
+	          title: places.name,
+	          animation: google.maps.Animation.DROP
+	    });
+	    
+	   	google.maps.event.addListener(marker, 'click', function() {
+			infowindow.setContent(places.name);
+			infowindow.open(map, this);
+		});
+	}
+   
 </script>
 <title>카테고리별 장소 검색하기</title>
 </head>
@@ -231,7 +301,8 @@
 
 
 	<div id="map"></div>
-
+	
+	<div id="categoryResult"></div>
 
 	<script async defer
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABYid41RaVrQL5pT8XhbZcRo3ss-MYG2w&libraries=places&callback=initMap"></script>
