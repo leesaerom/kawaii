@@ -58,6 +58,7 @@
  	function initialize(latitude, longitude) {
  		/* 현재 위치의 위도와 경도 정보를 currentLocatioon 에 초기화 */
  		var currentLocation = new google.maps.LatLng(latitude, longitude);
+ 		
  		var mapOptions = {
  			center : currentLocation, /* 지도에 보여질 위치 */
  			zoom : 16, /* 지도 줌 (0축소 ~ 18확대),  */
@@ -158,33 +159,7 @@
  				infowindow.open(map, this);
  			});
  		}
- 		     /*  for (var i = 0, place; place = places[i]; i++) {
- 		        var image = {
- 		          url: place.icon,
- 		          size: new google.maps.Size(71, 71),
- 		          origin: new google.maps.Point(0, 0),
- 		          anchor: new google.maps.Point(17, 34),
- 		          scaledSize: new google.maps.Size(25, 25)
- 		        };
-
- 		        var marker = new google.maps.Marker({
- 		          map: map,
- 		          icon: image,
- 		          title: place.name,
- 		          position: place.geometry.location
- 		        });
-	
- 		        bounds.extend(place.geometry.location);
- 		       google.maps.event.addListener(marker, 'click', function() {
- 		    	  infowindow.setContent(marker.title);
- 		    	  
- 		    	  infowindow.open(map, this);
- 		    	  });
- 		      }
- 		      map.fitBounds(bounds);
- 		    } */
-
- 		   /*  window.google.maps.event.addDomListener(window, 'load', initialize); */
+ 		    
  	
 </script>
 </head>

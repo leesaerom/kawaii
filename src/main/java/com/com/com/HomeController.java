@@ -232,6 +232,40 @@ public class HomeController {
 		return "home8";
 	}
 	
+	@RequestMapping(value = "/home9", method = RequestMethod.GET)
+	public String home9() {
+		
+		return "home9";
+	}
+	@RequestMapping(value = "/home10", method = RequestMethod.GET)
+	public String home10() {
+		
+		return "home10";
+	}
+	@RequestMapping(value = "/home11", method = RequestMethod.GET)
+	public String home11() {
+		
+		return "home11";
+	}
+	
+	@RequestMapping(value = "/createPostSaerom", method = RequestMethod.GET)
+	public String createPostSaerom() {
+		
+		return "createPostSaerom";
+	}
+	
+	@RequestMapping(value = "/mapageSaerom", method = RequestMethod.GET)
+	public String photoListSaerom() {
+		
+		return "mapageSaerom";
+	}
+	
+	
+	@RequestMapping(value = "/postViewSaerom", method = RequestMethod.GET)
+	public String postViewSaerom() {
+		
+		return "postViewSaerom";
+	}
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String write() {
 		

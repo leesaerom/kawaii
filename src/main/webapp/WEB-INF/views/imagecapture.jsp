@@ -145,7 +145,8 @@ input[type='file'] {
 			$("#upResult2").html(result);
 			$("#callMap").click(mapinfo);
 		}
-function mapinfo() {
+		
+	function mapinfo() {
 		var map;
 		var marker;
 		var infowindow;
@@ -176,7 +177,7 @@ function mapinfo() {
 			center : {
 				lat : lat,
 				lng : lng
-			},
+			}
 		});
 
 		geocoder = new google.maps.Geocoder;

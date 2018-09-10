@@ -259,6 +259,7 @@
 	}
 			
 	function createMarkers(places) {
+		
 		var bounds = new google.maps.LatLngBounds();
 		var placeLoc = places.geometry.location;	
 		
@@ -270,9 +271,17 @@
 	    });
 	    
 	   	google.maps.event.addListener(marker, 'click', function() {
+	   		removeMarker();
 			infowindow.setContent(places.name);
 			infowindow.open(map, this);
 		});
+	}
+	
+	function removeMarker() {
+	    for ( var i = 0; i < markers.length; i++ ) {
+	        markers[i].setMap(null);
+	    }   
+	    markers = [];
 	}
    
 </script>
